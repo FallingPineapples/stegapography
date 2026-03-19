@@ -5,7 +5,7 @@ mangle = function(.data, ...) {
     select(one_of(nms))
 }
 
-stegapograpy = function(dithered_pineapple_data, n_x=4) {
+stegapography = function(dithered_pineapple_data, n_x=4) {
   dithered_pineapple_data %>%
   	mutate(across(everything(), scale)) -> rescaled_pineapple_data
 
@@ -14,7 +14,7 @@ stegapograpy = function(dithered_pineapple_data, n_x=4) {
   display_pineapple_data %>% mutate(y = x + y) -> data_pineapple_data
 
   setNames(nm=paste0("x", 1:(n_x-1))) %>%
-    map(\() rnorm(nrow(data_pineapple_data))) -> random_data
+    map(\(.x) rnorm(nrow(data_pineapple_data))) -> random_data
 
   data_pineapple_data %>%
     mangle(y = y, x0 = x) %>%
@@ -24,7 +24,7 @@ stegapograpy = function(dithered_pineapple_data, n_x=4) {
   expanded_pineapple_data %>% setcorrelate_output() -> decor_pineapple_data
 
   x0_basis = c(0, 1, rep.int(0, n_x-1))
-  target = c(0, sample(c(1, -1), n_x, replace=TRUE))
+  target = c(0, sample(c(1, -1), n_x, replace=TRUE)) %>% normalize()
   final_transform = v2v_rotation_matrix(x0_basis, target)
 
   (as.matrix(decor_pineapple_data) %*% final_transform) %>% as.data.frame()
@@ -69,7 +69,18 @@ setcorrelate_output = function(expanded_pineapple_data) {
 
 # https://en.wikipedia.org/wiki/Rotation_matrix#Vector_to_vector_formulation
 v2v_rotation_matrix = function(x, y) {
+  stopifnot(length(x) == length(y))
+  stopifnot(is_normalized(x))
+  stopifnot(is_normalized(y))
   I = diag(nrow=length(x))
   m = (x %o% y) - (y %o% x)
-  I + m + (1/(1+(x %*% y)))*(m %*% m)
+  I + m + (1/(1+drop(x %*% y)))*(m %*% m)
+}
+
+normalize = function(x) {
+  x / sqrt(drop(x %*% x))
+}
+
+is_normalized = function(x) {
+  isTRUE(all.equal(drop(x %*% x), 1))
 }
