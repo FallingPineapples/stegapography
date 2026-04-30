@@ -5,11 +5,10 @@ mangle = function(.data, ...) {
     select(one_of(nms))
 }
 
-stegapography = function(dithered_pineapple_data, n_x=4) {
-  dithered_pineapple_data %>%
-  	mutate(across(everything(), scale)) -> rescaled_pineapple_data
+stegapography = function(data, n_x=4, max_iter=100) {
+  data %>% mutate(across(everything(), scale)) -> rescaled_pineapple_data
 
-  rescaled_pineapple_data %>% decorrelate_input() -> display_pineapple_data
+  rescaled_pineapple_data %>% decorrelate_input(max_iter) -> display_pineapple_data
 
   display_pineapple_data %>% mutate(y = x + y) -> data_pineapple_data
 
@@ -30,10 +29,10 @@ stegapography = function(dithered_pineapple_data, n_x=4) {
   (as.matrix(decor_pineapple_data) %*% final_transform) %>% as.data.frame()
 }
 
-decorrelate_input = function(rescaled_pineapple_data) {
-  rescaled_pineapple_data -> working_pineapple_data
+decorrelate_input = function(data, max_iter=100) {
+  data -> working_pineapple_data
 
-  for (i in 1:100) {
+  for (.i in 1:max_iter) {
     anti_model = lm(y ~ x, working_pineapple_data)
     gradient = -influence(anti_model)$coefficients[,2]
     point_id = which.min(abs(gradient - coef(anti_model)[[2]]))
@@ -48,8 +47,8 @@ decorrelate_input = function(rescaled_pineapple_data) {
 
 # reduce more of the correlations
 # https://stackoverflow.com/questions/44930211/generate-uncorrelated-variables-each-well-correlated-with-existing-response-vari
-setcorrelate_output = function(expanded_pineapple_data) {
-  wpd = expanded_pineapple_data
+setcorrelate_output = function(data) {
+  wpd = data
   mns = apply(wpd, 2, mean)
   sds = apply(wpd, 2, sd)
 
