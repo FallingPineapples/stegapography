@@ -1,6 +1,6 @@
 Package: stegapography
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Hide Images in Residual Plots
 Version: 0.1.0
 Authors@R: c(
     person(
