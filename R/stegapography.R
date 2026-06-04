@@ -5,7 +5,7 @@ mangle = function(.data, ...) {
     select(one_of(nms))
 }
 
-stegapography = function(data, n_x=4, max_iter=100) {
+stegapography = function(data, n_x=5, max_iter=100) {
   data %>% mutate(across(everything(), scale)) -> rescaled_pineapple_data
 
   rescaled_pineapple_data %>% decorrelate_input(max_iter) -> display_pineapple_data
@@ -23,8 +23,10 @@ stegapography = function(data, n_x=4, max_iter=100) {
   expanded_pineapple_data %>% setcorrelate_output() -> decor_pineapple_data
 
   x0_basis = c(0, 1, rep.int(0, n_x-1))
+  # TODO: target is obvious in correlations, remove oddities
   target = c(0, sample(c(1, -1), n_x, replace=TRUE)) %>% normalize()
   final_transform = v2v_rotation_matrix(x0_basis, target)
+  dimnames(final_transform) <- list(names(decor_pineapple_data), names(decor_pineapple_data))
 
   (as.matrix(decor_pineapple_data) %*% final_transform) %>% as.data.frame()
 }
