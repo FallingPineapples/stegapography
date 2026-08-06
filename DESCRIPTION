@@ -4,15 +4,30 @@ Title: Hide Images in Residual Plots
 Version: 0.1.0
 Authors@R: c(
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
-      role = c("aut", "cre")
-    )
+      given = "Falling", family = "Pineapples",
+      role = c("aut"),
+      comment = "Original author"
+    ),
+    person(
+      given = "Ethan C.", family = "Brown",
+      email = "ethancbrown@gmail.com",
+      role = c("cre"),
+      comment = "Maintainer")
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
-License: What license is it under?
+Description: Disguises a two-column picture as an unremarkable-looking set
+    of predictors. The picture is invisible in the raw data and in the
+    pairwise correlations, but reappears in the residuals of a linear model
+    fit to the result.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends: dplyr, purrr, magrittr
-Suggests: ort
+Imports:
+    dplyr,
+    purrr,
+    magrittr,
+    stats
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+Config/roxygen2/version: 8.1.0
