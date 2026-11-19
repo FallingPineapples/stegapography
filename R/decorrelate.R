@@ -19,7 +19,7 @@
 #' set.seed(1)
 #' d <- data.frame(x = rnorm(50), y = rnorm(50))
 #' nrow(decorrelate_input(d))
-decorrelate_input = function(data, max_iter=100) {
+decorrelate_input = function(data, max_iter=20) {
   data -> working_pineapple_data
 
   for (.i in 1:max_iter) {
@@ -27,6 +27,7 @@ decorrelate_input = function(data, max_iter=100) {
     gradient = -influence(anti_model)$coefficients[,2]
     point_id = which.min(abs(gradient - coef(anti_model)[[2]]))
     copies = round(coef(anti_model)[[2]] / gradient[[point_id]])
+    if (copies >= nrow(data)*10) stop("excessive decorrelation copies, input is probably monotonic")
     if (copies <= 0) break
     working_pineapple_data %<>% .[c(1:nrow(.), rep(point_id, copies)),]
     # working_pineapple_data %<>% .[setdiff(1:nrow(.), point_id),]

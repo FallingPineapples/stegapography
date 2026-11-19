@@ -33,6 +33,12 @@ test_that("decorrelate_input flattens the y ~ x slope", {
   expect_lt(after, before)
 })
 
+test_that("decorrelate_input errors out instead of melting on monotonic data", {
+  d = data.frame(y = c(0, 1, 3), x = c(0, 2, 3))
+
+  expect_error(decorrelate_input(d), "copies")
+})
+
 test_that("setcorrelate_output decorrelates everything but the first pair", {
   set.seed(5)
   d = data.frame(y = rnorm(50), x0 = rnorm(50), x1 = rnorm(50), x2 = rnorm(50))

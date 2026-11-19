@@ -4,7 +4,7 @@
 \alias{decorrelate_input}
 \title{Flatten the y ~ x slope by duplicating influential points}
 \usage{
-decorrelate_input(data, max_iter = 100)
+decorrelate_input(data, max_iter = 20)
 }
 \arguments{
 \item{data}{A data frame with numeric columns \code{x} and \code{y}.}

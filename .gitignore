@@ -5,3 +5,5 @@
 
 desktop.ini
 .DS_Store
+
+tests/testthat/_problems

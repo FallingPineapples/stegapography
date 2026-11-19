@@ -4,7 +4,7 @@
 \alias{stegapography}
 \title{Hide a picture in a regression's residuals}
 \usage{
-stegapography(data, n_x = 5, max_iter = 100)
+stegapography(data, n_x = 5, max_iter = 20)
 }
 \arguments{
 \item{data}{A data frame with numeric columns \code{x} and \code{y}, holding the

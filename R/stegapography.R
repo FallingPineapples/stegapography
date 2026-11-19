@@ -24,7 +24,7 @@
 #' hidden <- stegapography(picture)
 #' round(cor(hidden), 3)
 #' plot(resid(lm(y ~ ., hidden)) ~ fitted(lm(y ~ ., hidden)))
-stegapography = function(data, n_x=5, max_iter=100) {
+stegapography = function(data, n_x=5, max_iter=20) {
   data %>% mutate(across(everything(), scale)) -> rescaled_pineapple_data
 
   rescaled_pineapple_data %>% decorrelate_input(max_iter) -> display_pineapple_data
